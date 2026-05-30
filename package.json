@@ -1,0 +1,21 @@
+{
+  "name": "personal-site",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/astro-command.mjs dev",
+    "build": "node scripts/build.mjs",
+    "preview": "node scripts/astro-command.mjs preview",
+    "test": "node --test tests/site-content.test.mjs",
+    "verify:preview": "node scripts/verify-preview.mjs"
+  },
+  "dependencies": {
+    "astro": "^5.8.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.4",
+    "playwright-core": "^1.60.0",
+    "typescript": "^5.8.3"
+  }
+}

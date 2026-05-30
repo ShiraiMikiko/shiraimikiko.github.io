@@ -1,0 +1,296 @@
+---
+import { navItems, site } from "../data/site";
+import "../styles/global.css";
+
+type Language = "en" | "zh";
+
+const languages: Language[] = ["en", "zh"];
+const translations: Record<Language, Record<string, string>> = {
+  en: {},
+  zh: {},
+};
+
+for (const language of languages) {
+  translations[language] = {
+    ...site.copy[language],
+    "profile.affiliation": site.profile.affiliation[language],
+    "profile.bio": site.profile.bio[language],
+  };
+
+  site.profile.keywords[language].forEach((keyword, index) => {
+    translations[language][`profile.keyword.${index}`] = keyword;
+  });
+
+  site.profile.links.forEach((item, index) => {
+    translations[language][`profile.link.${index}.label`] = item.label[language];
+  });
+
+  site.work.research.forEach((item, index) => {
+    translations[language][`work.research.${index}.title`] = item.title[language];
+    translations[language][`work.research.${index}.detail`] = item.detail[language];
+  });
+
+  site.work.infrastructure.forEach((item, index) => {
+    translations[language][`work.infrastructure.${index}.title`] = item.title[language];
+    translations[language][`work.infrastructure.${index}.detail`] = item.detail[language];
+  });
+
+  site.publications.forEach((item, index) => {
+    translations[language][`publication.${index}.status`] = item.status[language];
+    translations[language][`publication.${index}.summary`] = item.summary[language];
+  });
+
+  site.blog.forEach((item, index) => {
+    translations[language][`blog.${index}.title`] = item.title[language];
+    translations[language][`blog.${index}.category`] = item.category[language];
+    translations[language][`blog.${index}.summary`] = item.summary[language];
+  });
+
+  site.cv.education.forEach((item, index) => {
+    translations[language][`cv.education.${index}`] = item[language];
+  });
+
+  site.cv.skills.forEach((item, index) => {
+    translations[language][`cv.skills.${index}`] = item[language];
+  });
+}
+
+const t = translations.en;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={t.metaDescription} />
+    <title>{t.pageTitle}</title>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#about" aria-label="Back to top">
+        {site.profile.nameEn}
+      </a>
+      <div class="header-actions">
+        <nav class="nav" aria-label="Primary navigation">
+          {
+            navItems.map((item) => (
+              <a href={item.href} data-i18n={item.key}>
+                {t[item.key]}
+              </a>
+            ))
+          }
+        </nav>
+        <div class="language-switch" id="language-switch" role="group" aria-label="Language selection">
+          <button class="language-option" type="button" data-language-option="en" aria-pressed="true">
+            EN
+          </button>
+          <button class="language-option" type="button" data-language-option="zh" aria-pressed="false">
+            中文
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section id="about" class="section about-section" aria-labelledby="about-title">
+        <aside class="identity">
+          <img class="portrait" src={site.profile.photo} alt={`${site.profile.nameEn} portrait`} />
+          <p class="name-zh">{site.profile.nameZh}</p>
+          <p class="name-en">{site.profile.nameEn}</p>
+          <p class="affiliation" data-i18n="profile.affiliation">{t["profile.affiliation"]}</p>
+          <div class="contact-list">
+            <a href={`mailto:${site.profile.email}`}>Email</a>
+            <a href={site.profile.github} target="_blank" rel="noreferrer">GitHub</a>
+            <a href="#publications" data-i18n="contactPdfs">{t.contactPdfs}</a>
+          </div>
+        </aside>
+
+        <div class="intro">
+          <p class="eyebrow" data-i18n="academicEyebrow">{t.academicEyebrow}</p>
+          <h1 id="about-title" data-i18n="heroTitle">{t.heroTitle}</h1>
+          <p class="lead" data-i18n="profile.bio">{t["profile.bio"]}</p>
+          <div class="profile-link-list" aria-label="Institution and team links">
+            {
+              site.profile.links.map((item, index) => (
+                <a href={item.href} target="_blank" rel="noreferrer" data-i18n={`profile.link.${index}.label`}>
+                  {item.label.en}
+                </a>
+              ))
+            }
+          </div>
+          <div class="keyword-list" aria-label="Research keywords">
+            {
+              site.profile.keywords.en.map((keyword, index) => (
+                <span data-i18n={`profile.keyword.${index}`}>{keyword}</span>
+              ))
+            }
+          </div>
+        </div>
+      </section>
+
+      <section id="work" class="section" aria-labelledby="work-title">
+        <div class="section-heading">
+          <p class="eyebrow" data-i18n="workEyebrow">{t.workEyebrow}</p>
+          <h2 id="work-title" data-i18n="workTitle">{t.workTitle}</h2>
+        </div>
+        <div class="work-grid">
+          <div class="work-column">
+            <h3 data-i18n="researchHeading">{t.researchHeading}</h3>
+            {
+              site.work.research.map((item, index) => (
+                <article class="work-item">
+                  <h4 data-i18n={`work.research.${index}.title`}>{item.title.en}</h4>
+                  <p data-i18n={`work.research.${index}.detail`}>{item.detail.en}</p>
+                </article>
+              ))
+            }
+          </div>
+          <div class="work-column">
+            <h3 data-i18n="infrastructureHeading">{t.infrastructureHeading}</h3>
+            {
+              site.work.infrastructure.map((item, index) => (
+                <article class="work-item">
+                  <h4 data-i18n={`work.infrastructure.${index}.title`}>{item.title.en}</h4>
+                  <p data-i18n={`work.infrastructure.${index}.detail`}>{item.detail.en}</p>
+                </article>
+              ))
+            }
+          </div>
+        </div>
+      </section>
+
+      <section id="publications" class="section" aria-labelledby="publications-title">
+        <div class="section-heading">
+          <p class="eyebrow" data-i18n="publicationsEyebrow">{t.publicationsEyebrow}</p>
+          <h2 id="publications-title" data-i18n="publicationsTitle">{t.publicationsTitle}</h2>
+        </div>
+        <div class="publication-list">
+          {
+            site.publications.map((item, index) => (
+              <article class="publication-card">
+                <a class="publication-image" href={item.pdf} target="_blank" rel="noreferrer">
+                  <img src={item.image} alt={`${item.title} cover`} loading="lazy" />
+                </a>
+                <div class="publication-body">
+                  <p class="status" data-i18n={`publication.${index}.status`}>{item.status.en}</p>
+                  <h3>
+                    <a href={item.pdf} target="_blank" rel="noreferrer">{item.title}</a>
+                  </h3>
+                  <p class="venue">{item.venue}</p>
+                  <p data-i18n={`publication.${index}.summary`}>{item.summary.en}</p>
+                  <div class="publication-actions">
+                    <a href={item.pdf} target="_blank" rel="noreferrer" data-i18n="pdfButton">
+                      {t.pdfButton}
+                    </a>
+                  </div>
+                </div>
+              </article>
+            ))
+          }
+        </div>
+      </section>
+
+      <section id="blog" class="section blog-section" aria-labelledby="blog-title">
+        <div class="section-heading">
+          <p class="eyebrow" data-i18n="blogEyebrow">{t.blogEyebrow}</p>
+          <h2 id="blog-title" data-i18n="blogTitle">{t.blogTitle}</h2>
+        </div>
+        <div class="blog-grid">
+          {
+            site.blog.map((item, index) => (
+              <article class="blog-card">
+                <img class="blog-image" src={item.image} alt={`${item.title.en} cover`} loading="lazy" />
+                <div class="blog-body">
+                  <p class="blog-category" data-i18n={`blog.${index}.category`}>{item.category.en}</p>
+                  <h3 data-i18n={`blog.${index}.title`}>{item.title.en}</h3>
+                  <p data-i18n={`blog.${index}.summary`}>{item.summary.en}</p>
+                </div>
+              </article>
+            ))
+          }
+        </div>
+      </section>
+
+      <section id="cv" class="section cv-section" aria-labelledby="cv-title">
+        <div class="section-heading">
+          <p class="eyebrow" data-i18n="cvEyebrow">{t.cvEyebrow}</p>
+          <h2 id="cv-title" data-i18n="cvTitle">{t.cvTitle}</h2>
+        </div>
+        <div class="cv-grid">
+          <div>
+            <h3 data-i18n="educationHeading">{t.educationHeading}</h3>
+            <ul>
+              {
+                site.cv.education.map((item, index) => (
+                  <li data-i18n={`cv.education.${index}`}>{item.en}</li>
+                ))
+              }
+            </ul>
+          </div>
+          <div>
+            <h3 data-i18n="skillsHeading">{t.skillsHeading}</h3>
+            <ul>
+              {site.cv.skills.map((item, index) => <li data-i18n={`cv.skills.${index}`}>{item.en}</li>)}
+            </ul>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>
+        &copy; {new Date().getFullYear()} {site.profile.nameEn}.
+        <span data-i18n="footerPrefix">{t.footerPrefix}</span>
+      </p>
+    </footer>
+
+    <script is:inline id="i18n-data" type="application/json" set:html={JSON.stringify(translations)}></script>
+    <script>
+      const languageDataElement = document.getElementById("i18n-data");
+      const translations: Record<string, Record<string, string>> = JSON.parse(
+        languageDataElement?.textContent ?? "{}",
+      );
+      const languageOptions = Array.from(
+        document.querySelectorAll<HTMLButtonElement>("[data-language-option]"),
+      );
+      const metaDescription = document.querySelector('meta[name="description"]');
+
+      function normalizeLanguage(language: string | null) {
+        return language === "zh" ? "zh" : "en";
+      }
+
+      function applyLanguage(language: string | null) {
+        const nextLanguage = normalizeLanguage(language);
+        const currentCopy = translations[nextLanguage] ?? translations.en;
+
+        document.querySelectorAll("[data-i18n]").forEach((element) => {
+          const key = element.getAttribute("data-i18n");
+          if (key && currentCopy[key]) {
+            element.textContent = currentCopy[key];
+          }
+        });
+
+        document.documentElement.lang = nextLanguage === "zh" ? "zh-CN" : "en";
+        document.title = currentCopy.pageTitle ?? document.title;
+        metaDescription?.setAttribute("content", currentCopy.metaDescription ?? "");
+
+        languageOptions.forEach((option) => {
+          const isActive = option.dataset.languageOption === nextLanguage;
+          option.setAttribute("aria-pressed", isActive ? "true" : "false");
+          option.classList.toggle("is-active", isActive);
+        });
+
+        localStorage.setItem("preferred-language", nextLanguage);
+      }
+
+      applyLanguage(normalizeLanguage(localStorage.getItem("preferred-language")));
+
+      languageOptions.forEach((option) => {
+        option.addEventListener("click", () => {
+          applyLanguage(option.dataset.languageOption ?? "en");
+        });
+      });
+    </script>
+  </body>
+</html>
