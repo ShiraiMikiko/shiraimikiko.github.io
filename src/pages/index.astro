@@ -13,7 +13,10 @@ const translations: Record<Language, Record<string, string>> = {
 for (const language of languages) {
   translations[language] = {
     ...site.copy[language],
+    "profile.title": site.profile.title[language],
+    "profile.focus": site.profile.focus[language],
     "profile.affiliation": site.profile.affiliation[language],
+    "profile.location": site.profile.location[language],
     "profile.bio": site.profile.bio[language],
   };
 
@@ -40,14 +43,16 @@ for (const language of languages) {
     translations[language][`publication.${index}.summary`] = item.summary[language];
   });
 
+  site.cv.education.forEach((item, index) => {
+    translations[language][`cv.education.${index}.institution`] = item.institution[language];
+    translations[language][`cv.education.${index}.school`] = item.school[language];
+    translations[language][`cv.education.${index}.degree`] = item.degree[language];
+  });
+
   site.blog.forEach((item, index) => {
     translations[language][`blog.${index}.title`] = item.title[language];
     translations[language][`blog.${index}.category`] = item.category[language];
     translations[language][`blog.${index}.summary`] = item.summary[language];
-  });
-
-  site.cv.education.forEach((item, index) => {
-    translations[language][`cv.education.${index}`] = item[language];
   });
 
   site.cv.skills.forEach((item, index) => {
@@ -68,8 +73,8 @@ const t = translations.en;
   </head>
   <body>
     <header class="site-header">
-      <a class="brand" href="#about" aria-label="Back to top">
-        {site.profile.nameEn}
+      <a class="brand" href="#about" aria-label="Back to top" data-i18n="brandLabel">
+        {t.brandLabel}
       </a>
       <div class="header-actions">
         <nav class="nav" aria-label="Primary navigation">
@@ -92,33 +97,38 @@ const t = translations.en;
       </div>
     </header>
 
-    <main>
-      <section id="about" class="section about-section" aria-labelledby="about-title">
-        <aside class="identity">
-          <img class="portrait" src={site.profile.photo} alt={`${site.profile.nameEn} portrait`} />
-          <p class="name-zh">{site.profile.nameZh}</p>
-          <p class="name-en">{site.profile.nameEn}</p>
-          <p class="affiliation" data-i18n="profile.affiliation">{t["profile.affiliation"]}</p>
-          <div class="contact-list">
-            <a href={`mailto:${site.profile.email}`}>Email</a>
-            <a href={site.profile.github} target="_blank" rel="noreferrer">GitHub</a>
-            <a href="#publications" data-i18n="contactPdfs">{t.contactPdfs}</a>
-          </div>
-        </aside>
+    <div class="layout">
+      <aside class="sidebar" aria-label="Profile">
+        <img class="portrait" src={site.profile.photo} alt={`${site.profile.nameEn} portrait`} />
+        <p class="name-zh">{site.profile.nameZh}</p>
+        <p class="name-en">{site.profile.nameEn}</p>
+        <p class="title" data-i18n="profile.title">{t["profile.title"]}</p>
+        <a
+          class="affiliation-link"
+          href={site.profile.affiliationUrl}
+          target="_blank"
+          rel="noreferrer"
+          data-i18n="profile.affiliation"
+        >
+          {t["profile.affiliation"]}
+        </a>
+        <p class="location">
+          <span class="location-pin" aria-hidden="true">📍</span>
+          <span data-i18n="profile.location">{t["profile.location"]}</span>
+        </p>
+        <p class="focus" data-i18n="profile.focus">{t["profile.focus"]}</p>
+        <ul class="sidebar-links">
+          <li><a href={`mailto:${site.profile.email}`}>Email</a></li>
+          <li><a href={site.profile.github} target="_blank" rel="noreferrer">GitHub</a></li>
+          <li><a href={site.profile.orcid} target="_blank" rel="noreferrer">ORCID</a></li>
+        </ul>
+      </aside>
 
-        <div class="intro">
+      <main class="content">
+        <section id="about" class="section about-section" aria-labelledby="about-title">
           <p class="eyebrow" data-i18n="academicEyebrow">{t.academicEyebrow}</p>
           <h1 id="about-title" data-i18n="heroTitle">{t.heroTitle}</h1>
           <p class="lead" data-i18n="profile.bio">{t["profile.bio"]}</p>
-          <div class="profile-link-list" aria-label="Institution and team links">
-            {
-              site.profile.links.map((item, index) => (
-                <a href={item.href} target="_blank" rel="noreferrer" data-i18n={`profile.link.${index}.label`}>
-                  {item.label.en}
-                </a>
-              ))
-            }
-          </div>
           <div class="keyword-list" aria-label="Research keywords">
             {
               site.profile.keywords.en.map((keyword, index) => (
@@ -126,119 +136,146 @@ const t = translations.en;
               ))
             }
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section id="work" class="section" aria-labelledby="work-title">
-        <div class="section-heading">
-          <p class="eyebrow" data-i18n="workEyebrow">{t.workEyebrow}</p>
-          <h2 id="work-title" data-i18n="workTitle">{t.workTitle}</h2>
-        </div>
-        <div class="work-grid">
-          <div class="work-column">
-            <h3 data-i18n="researchHeading">{t.researchHeading}</h3>
-            {
-              site.work.research.map((item, index) => (
-                <article class="work-item">
-                  <h4 data-i18n={`work.research.${index}.title`}>{item.title.en}</h4>
-                  <p data-i18n={`work.research.${index}.detail`}>{item.detail.en}</p>
-                </article>
-              ))
-            }
+        <section id="work" class="section" aria-labelledby="work-title">
+          <div class="section-heading">
+            <p class="eyebrow" data-i18n="workEyebrow">{t.workEyebrow}</p>
+            <h2 id="work-title" data-i18n="workTitle">{t.workTitle}</h2>
           </div>
-          <div class="work-column">
-            <h3 data-i18n="infrastructureHeading">{t.infrastructureHeading}</h3>
-            {
-              site.work.infrastructure.map((item, index) => (
-                <article class="work-item">
-                  <h4 data-i18n={`work.infrastructure.${index}.title`}>{item.title.en}</h4>
-                  <p data-i18n={`work.infrastructure.${index}.detail`}>{item.detail.en}</p>
-                </article>
-              ))
-            }
-          </div>
-        </div>
-      </section>
-
-      <section id="publications" class="section" aria-labelledby="publications-title">
-        <div class="section-heading">
-          <p class="eyebrow" data-i18n="publicationsEyebrow">{t.publicationsEyebrow}</p>
-          <h2 id="publications-title" data-i18n="publicationsTitle">{t.publicationsTitle}</h2>
-        </div>
-        <div class="publication-list">
-          {
-            site.publications.map((item, index) => (
-              <article class="publication-card">
-                <a class="publication-image" href={item.pdf} target="_blank" rel="noreferrer">
-                  <img src={item.image} alt={`${item.title} cover`} loading="lazy" />
-                </a>
-                <div class="publication-body">
-                  <p class="status" data-i18n={`publication.${index}.status`}>{item.status.en}</p>
-                  <h3>
-                    <a href={item.pdf} target="_blank" rel="noreferrer">{item.title}</a>
-                  </h3>
-                  <p class="venue">{item.venue}</p>
-                  <p data-i18n={`publication.${index}.summary`}>{item.summary.en}</p>
-                  <div class="publication-actions">
-                    <a href={item.pdf} target="_blank" rel="noreferrer" data-i18n="pdfButton">
-                      {t.pdfButton}
-                    </a>
-                  </div>
-                </div>
-              </article>
-            ))
-          }
-        </div>
-      </section>
-
-      <section id="blog" class="section blog-section" aria-labelledby="blog-title">
-        <div class="section-heading">
-          <p class="eyebrow" data-i18n="blogEyebrow">{t.blogEyebrow}</p>
-          <h2 id="blog-title" data-i18n="blogTitle">{t.blogTitle}</h2>
-        </div>
-        <div class="blog-grid">
-          {
-            site.blog.map((item, index) => (
-              <article class="blog-card">
-                <img class="blog-image" src={item.image} alt={`${item.title.en} cover`} loading="lazy" />
-                <div class="blog-body">
-                  <p class="blog-category" data-i18n={`blog.${index}.category`}>{item.category.en}</p>
-                  <h3 data-i18n={`blog.${index}.title`}>{item.title.en}</h3>
-                  <p data-i18n={`blog.${index}.summary`}>{item.summary.en}</p>
-                </div>
-              </article>
-            ))
-          }
-        </div>
-      </section>
-
-      <section id="cv" class="section cv-section" aria-labelledby="cv-title">
-        <div class="section-heading">
-          <p class="eyebrow" data-i18n="cvEyebrow">{t.cvEyebrow}</p>
-          <h2 id="cv-title" data-i18n="cvTitle">{t.cvTitle}</h2>
-        </div>
-        <div class="cv-grid">
-          <div>
-            <h3 data-i18n="educationHeading">{t.educationHeading}</h3>
-            <ul>
+          <div class="work-grid">
+            <div class="work-column">
+              <h3 data-i18n="researchHeading">{t.researchHeading}</h3>
               {
-                site.cv.education.map((item, index) => (
-                  <li data-i18n={`cv.education.${index}`}>{item.en}</li>
+                site.work.research.map((item, index) => (
+                  <article class="work-item">
+                    <h4 data-i18n={`work.research.${index}.title`}>{item.title.en}</h4>
+                    <p data-i18n={`work.research.${index}.detail`}>{item.detail.en}</p>
+                  </article>
                 ))
               }
-            </ul>
+            </div>
+            <div class="work-column">
+              <h3 data-i18n="infrastructureHeading">{t.infrastructureHeading}</h3>
+              {
+                site.work.infrastructure.map((item, index) => (
+                  <article class="work-item">
+                    <h4 data-i18n={`work.infrastructure.${index}.title`}>{item.title.en}</h4>
+                    <p data-i18n={`work.infrastructure.${index}.detail`}>{item.detail.en}</p>
+                  </article>
+                ))
+              }
+            </div>
           </div>
-          <div>
-            <h3 data-i18n="skillsHeading">{t.skillsHeading}</h3>
-            <ul>
-              {site.cv.skills.map((item, index) => <li data-i18n={`cv.skills.${index}`}>{item.en}</li>)}
-            </ul>
+        </section>
+
+        <section id="publications" class="section" aria-labelledby="publications-title">
+          <div class="section-heading">
+            <p class="eyebrow" data-i18n="publicationsEyebrow">{t.publicationsEyebrow}</p>
+            <h2 id="publications-title" data-i18n="publicationsTitle">{t.publicationsTitle}</h2>
           </div>
-        </div>
-      </section>
-    </main>
+          <div class="publication-list">
+            {
+              site.publications.map((item, index) => (
+                <article class="publication-card">
+                  <a class="publication-image" href={item.pdf} target="_blank" rel="noreferrer">
+                    <img src={item.image} alt={`${item.title} cover`} loading="lazy" />
+                  </a>
+                  <div class="publication-body">
+                    <p class="status" data-i18n={`publication.${index}.status`}>{item.status.en}</p>
+                    <h3>
+                      <a href={item.pdf} target="_blank" rel="noreferrer">{item.title}</a>
+                    </h3>
+                    <p class="venue">{item.venue}</p>
+                    <p data-i18n={`publication.${index}.summary`}>{item.summary.en}</p>
+                    <div class="publication-actions">
+                      <a href={item.pdf} target="_blank" rel="noreferrer" data-i18n="pdfButton">
+                        {t.pdfButton}
+                      </a>
+                    </div>
+                  </div>
+                </article>
+              ))
+            }
+          </div>
+        </section>
+
+        <section id="education" class="section education-section" aria-labelledby="education-title">
+          <div class="section-heading">
+            <p class="eyebrow" data-i18n="cvEyebrow">{t.cvEyebrow}</p>
+            <h2 id="education-title" data-i18n="cvTitle">{t.cvTitle}</h2>
+          </div>
+          <div class="cv-grid">
+            <div>
+              <h3 data-i18n="educationHeading">{t.educationHeading}</h3>
+              <ul class="education-list">
+                {
+                  site.cv.education.map((item, index) => (
+                    <li class="education-item">
+                      <a
+                        class="education-school"
+                        href={item.href}
+                        target="_blank"
+                        rel="noreferrer"
+                        data-i18n={`cv.education.${index}.institution`}
+                      >
+                        {item.institution.en}
+                      </a>
+                      <p class="education-degree" data-i18n={`cv.education.${index}.degree`}>
+                        {item.degree.en}
+                      </p>
+                      <p class="education-meta">
+                        <span data-i18n={`cv.education.${index}.school`}>{item.school.en}</span>
+                        <span class="education-period">{item.period}</span>
+                      </p>
+                    </li>
+                  ))
+                }
+              </ul>
+            </div>
+            <div>
+              <h3 data-i18n="skillsHeading">{t.skillsHeading}</h3>
+              <ul>
+                {site.cv.skills.map((item, index) => <li data-i18n={`cv.skills.${index}`}>{item.en}</li>)}
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="blog" class="section blog-section" aria-labelledby="blog-title">
+          <div class="section-heading">
+            <p class="eyebrow" data-i18n="blogEyebrow">{t.blogEyebrow}</p>
+            <h2 id="blog-title" data-i18n="blogTitle">{t.blogTitle}</h2>
+          </div>
+          <div class="blog-grid">
+            {
+              site.blog.map((item, index) => (
+                <article class="blog-card">
+                  <img class="blog-image" src={item.image} alt={`${item.title.en} cover`} loading="lazy" />
+                  <div class="blog-body">
+                    <p class="blog-category" data-i18n={`blog.${index}.category`}>{item.category.en}</p>
+                    <h3 data-i18n={`blog.${index}.title`}>{item.title.en}</h3>
+                    <p data-i18n={`blog.${index}.summary`}>{item.summary.en}</p>
+                  </div>
+                </article>
+              ))
+            }
+          </div>
+        </section>
+      </main>
+    </div>
 
     <footer class="footer">
+      <div class="footer-links" aria-label="Related links">
+        <span class="footer-links-label" data-i18n="footerLinksLabel">{t.footerLinksLabel}</span>
+        {
+          site.profile.links.map((item, index) => (
+            <a href={item.href} target="_blank" rel="noreferrer" data-i18n={`profile.link.${index}.label`}>
+              {item.label.en}
+            </a>
+          ))
+        }
+      </div>
       <p>
         &copy; {new Date().getFullYear()} {site.profile.nameEn}.
         <span data-i18n="footerPrefix">{t.footerPrefix}</span>

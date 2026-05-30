@@ -89,24 +89,31 @@ try {
 
   await page.screenshot({ path: screenshotPath, fullPage: true });
 
-  const result = await page.evaluate(() => ({
-    title: document.title,
-    hasSections: ["about", "work", "publications", "blog", "cv"].map((id) =>
-      Boolean(document.getElementById(id)),
-    ),
-    images: Array.from(document.images).map((image) => ({
-      src: image.currentSrc,
-      width: image.naturalWidth,
-      height: image.naturalHeight,
-    })),
-    text: document.body.innerText,
-  }));
+  const result = await page.evaluate(() => {
+    const sidebar = document.querySelector(".sidebar");
+    return {
+      title: document.title,
+      hasSections: ["about", "work", "publications", "education", "blog"].map((id) =>
+        Boolean(document.getElementById(id)),
+      ),
+      sidebarPosition: sidebar ? getComputedStyle(sidebar).position : "missing",
+      images: Array.from(document.images).map((image) => ({
+        src: image.currentSrc,
+        width: image.naturalWidth,
+        height: image.naturalHeight,
+      })),
+      text: document.body.innerText,
+    };
+  });
 
   assert.match(result.title, /Gao Xin/);
   assert.deepEqual(result.hasSections, [true, true, true, true, true]);
+  assert.equal(result.sidebarPosition, "sticky", "Sidebar should be sticky on desktop");
   assert.match(result.text, /Infrastructure/);
   assert.match(result.text, /XunziALLM/);
   assert.match(result.text, /Nanjing Agricultural University/);
+  assert.match(result.text, /China Pharmaceutical University/);
+  assert.match(result.text, /ORCID/);
   assert.match(result.text, /Selected academic work/);
   assert.match(result.text, /Field notes/);
   assert.ok(result.images.length >= 7, "Expected profile, publication, and blog images");

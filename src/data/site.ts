@@ -4,11 +4,12 @@ export const site = {
       pageTitle: "Gao Xin · Academic Homepage",
       metaDescription:
         "Personal academic homepage for Chinese historical text NLP, intelligent computing for cultural heritage, XunziALLM-related team work, and research infrastructure support.",
+      brandLabel: "Homepage",
       navAbout: "About",
       navWork: "Work",
       navPublications: "Publications",
+      navEducation: "Education",
       navBlog: "Blog",
-      navCv: "CV",
       academicEyebrow: "Academic Homepage",
       heroTitle:
         "Chinese historical text NLP, cultural heritage computing, and research infrastructure.",
@@ -20,12 +21,13 @@ export const site = {
       publicationsTitle: "Selected academic work",
       blogEyebrow: "Blog & Notes",
       blogTitle: "Field notes, photos, and occasional writing",
-      cvEyebrow: "CV",
-      cvTitle: "Short profile",
+      cvEyebrow: "Education & CV",
+      cvTitle: "Education and skills",
       educationHeading: "Education",
       skillsHeading: "Skills",
       contactPdfs: "PDFs",
       pdfButton: "PDF",
+      footerLinksLabel: "Links",
       languageToggleLabel: "Switch to Chinese",
       footerPrefix: "Built with Astro.",
     },
@@ -33,11 +35,12 @@ export const site = {
       pageTitle: "高鑫 · 个人学术主页",
       metaDescription:
         "高鑫的个人学术主页，关注中文历史文本 NLP、文化遗产智能计算、荀子大模型相关团队工作与科研基础设施支持。",
+      brandLabel: "主页",
       navAbout: "简介",
       navWork: "工作",
       navPublications: "成果",
+      navEducation: "教育",
       navBlog: "博客",
-      navCv: "简历",
       academicEyebrow: "个人主页",
       heroTitle: "中文历史文本 NLP、文化遗产智能计算与科研基础设施。",
       workEyebrow: "工作",
@@ -48,12 +51,13 @@ export const site = {
       publicationsTitle: "代表性学术工作",
       blogEyebrow: "博客与随记",
       blogTitle: "会议现场、摄影和一些日常记录",
-      cvEyebrow: "简历",
-      cvTitle: "简短介绍",
+      cvEyebrow: "教育与简历",
+      cvTitle: "教育背景与技能",
       educationHeading: "教育背景",
       skillsHeading: "技能",
       contactPdfs: "论文",
       pdfButton: "PDF",
+      footerLinksLabel: "友情链接",
       languageToggleLabel: "Switch to English",
       footerPrefix: "Built with Astro.",
     },
@@ -61,14 +65,27 @@ export const site = {
   profile: {
     nameZh: "高鑫",
     nameEn: "Gao Xin",
-    role: "Natural Language Processing / Intelligent Computing for Cultural Heritage",
+    title: {
+      en: "M.S. Student in Information Resources Management",
+      zh: "信息资源管理 硕士研究生",
+    },
+    focus: {
+      en: "Focusing on event extraction and implicit emotion reasoning for cultural heritage.",
+      zh: "聚焦文化遗产事件抽取与隐式情感推理。",
+    },
     photo: "/images/profile/profile-photo.jpg",
     affiliation: {
       en: "College of Information Management, Nanjing Agricultural University",
       zh: "南京农业大学信息管理学院",
     },
+    affiliationUrl: "https://info.njau.edu.cn/",
+    location: {
+      en: "Nanjing, Jiangsu, China",
+      zh: "江苏 · 南京",
+    },
     email: "gao_shirai@qq.com",
     github: "https://github.com/ShiraiMikiko",
+    orcid: "https://orcid.org/0009-0001-0658-310X",
     bio: {
       en: "I am a Master's student in Information Resources Management at the College of Information Management, Nanjing Agricultural University, working on Natural Language Processing / Intelligent Computing for Cultural Heritage. My research focuses on Chinese historical texts and cultural heritage narratives, especially event extraction, implicit emotion reasoning, long-chain reasoning, multi-agent collaboration, and LLM reinforcement learning. I also support our group's GPU clusters, storage systems, website deployment, security compliance, and model training workflows, and participate in digital humanities resources and ancient-text LLM systems such as XunziALLM.",
       zh: "我是南京农业大学信息资源管理专业硕士研究生，现就读于南京农业大学信息管理学院，研究方向为自然语言处理与文化遗产智能计算。我的研究聚焦中文历史文本与文化遗产叙事，关注事件抽取、事件隐式情感推理、长思维链推理、多智能体协作以及大语言模型强化学习等方法。同时，我也参与课题组科研基础设施与平台建设，支持 GPU 算力集群、存储系统、网站部署、安全合规与模型训练流程，并参与包括荀子大模型在内的数字人文工具与资源建设。",
@@ -79,13 +96,6 @@ export const site = {
         label: {
           en: "Nanjing Agricultural University",
           zh: "南京农业大学",
-        },
-      },
-      {
-        href: "https://info.njau.edu.cn/",
-        label: {
-          en: "College of Information Management",
-          zh: "南京农业大学信息管理学院",
         },
       },
       {
@@ -280,8 +290,24 @@ export const site = {
   cv: {
     education: [
       {
-        en: "Nanjing Agricultural University · Information Management",
-        zh: "南京农业大学 · 信息管理",
+        institution: { en: "Nanjing Agricultural University", zh: "南京农业大学" },
+        school: { en: "College of Information Management", zh: "信息管理学院" },
+        degree: {
+          en: "M.S. in Information Resources Management",
+          zh: "硕士 · 信息资源管理",
+        },
+        period: "2024.09 – 2027.06 (expected)",
+        href: "https://info.njau.edu.cn/",
+      },
+      {
+        institution: { en: "China Pharmaceutical University", zh: "中国药科大学" },
+        school: { en: "School of Science", zh: "理学院" },
+        degree: {
+          en: "B.S. in Information Management and Information Systems",
+          zh: "本科 · 信息管理与信息系统",
+        },
+        period: "2020.09 – 2024.06",
+        href: "https://lxy.cpu.edu.cn/",
       },
     ],
     skills: [
@@ -309,6 +335,6 @@ export const navItems = [
   { href: "#about", key: "navAbout" },
   { href: "#work", key: "navWork" },
   { href: "#publications", key: "navPublications" },
+  { href: "#education", key: "navEducation" },
   { href: "#blog", key: "navBlog" },
-  { href: "#cv", key: "navCv" },
 ];

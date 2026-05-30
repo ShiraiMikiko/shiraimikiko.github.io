@@ -25,11 +25,11 @@ describe("one-page academic site scaffold", () => {
     const page = read("src/pages/index.astro");
     const data = read("src/data/site.ts");
 
-    for (const anchor of ["#about", "#work", "#publications", "#blog", "#cv"]) {
+    for (const anchor of ["#about", "#work", "#publications", "#education", "#blog"]) {
       assert.match(data, new RegExp(`href: "${anchor}"`));
     }
 
-    for (const sectionId of ["about", "work", "publications", "blog", "cv"]) {
+    for (const sectionId of ["about", "work", "publications", "education", "blog"]) {
       assert.match(page, new RegExp(`id="${sectionId}"`));
     }
   });
@@ -90,8 +90,37 @@ describe("one-page academic site scaffold", () => {
     assert.match(data, /https:\/\/xunziallm\.njau\.edu\.cn\//);
     assert.match(data, /XunziALLM/);
     assert.match(data, /荀子大模型/);
-    assert.match(page, /class="profile-link-list"/);
+    assert.match(page, /class="affiliation-link"/);
+    assert.match(page, /class="footer-links"/);
     assert.match(page, /data-i18n={`profile\.link\.\$\{index\}\.label`}/);
+  });
+
+  it("renders a sticky sidebar layout with personal links and homepage brand", () => {
+    const page = read("src/pages/index.astro");
+    const css = read("src/styles/global.css");
+
+    assert.match(page, /data-i18n="brandLabel"/);
+    assert.match(page, /class="layout"/);
+    assert.match(page, /class="sidebar"/);
+    assert.match(page, /class="sidebar-links"/);
+    assert.match(page, /href={site\.profile\.orcid}/);
+    assert.match(page, /class="location"/);
+    assert.match(css, /\.sidebar\s*{[^}]*position:\s*sticky/);
+  });
+
+  it("lists graduate and undergraduate education with linked institutions", () => {
+    const data = read("src/data/site.ts");
+    const page = read("src/pages/index.astro");
+
+    assert.match(data, /南京农业大学/);
+    assert.match(data, /中国药科大学/);
+    assert.match(data, /信息管理与信息系统/);
+    assert.match(data, /https:\/\/lxy\.cpu\.edu\.cn\//);
+    assert.match(data, /2024\.09 – 2027\.06/);
+    assert.match(data, /2020\.09 – 2024\.06/);
+    assert.match(data, /orcid:\s*"https:\/\/orcid\.org\/0009-0001-0658-310X"/);
+    assert.match(page, /class="education-list"/);
+    assert.match(page, /class="education-school"/);
   });
 
   it("provides an in-page Chinese and English language toggle", () => {
